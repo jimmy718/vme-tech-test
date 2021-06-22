@@ -18,6 +18,6 @@ abstract class AbstractProductsQuery
                 'brand',
                 AllowedFilter::custom('search', new SearchProductNameBarcodeAndBrand()),
                 AllowedFilter::custom('price-range', new PriceRange())
-            ])
+            ]);
     }
 }
