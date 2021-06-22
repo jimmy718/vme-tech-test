@@ -77,6 +77,30 @@ class ListProductsTest extends TestCase
         }
     }
 
+    /** @test */
+    public function products_can_be_sorted_by_name()
+    {
+        Product::factory()->create(['name' => 'test b']);
+        Product::factory()->create(['name' => 'test a']);
+        Product::factory()->create(['name' => 'test c']);
+
+        $response = $this
+            ->actingAs(User::factory()->create())
+            ->getJson(route('products.index', [
+                'sort' => [
+                    '-name'
+                ]
+            ]))
+            ->assertOk()
+            ->assertJsonCount(3, 'data');
+
+        $products = json_decode($response->content())->data;
+
+        $this->assertEquals('test c', $products[0]->name);
+        $this->assertEquals('test b', $products[1]->name);
+        $this->assertEquals('test a', $products[2]->name);
+    }
+
     /**
      * @return array
      */

@@ -19,6 +19,7 @@ class ProductsController extends Controller
     public function index(Request $request): ResourceCollection
     {
         $products = QueryBuilder::for(Product::class)
+            ->allowedSorts('name', 'barcode', 'brand', 'price', 'date_added')
             ->allowedFilters([
                 AllowedFilter::custom('search', new SearchProductNameBarcodeAndBrand())
             ])
