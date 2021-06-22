@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Queries\Filters\Product;
+namespace App\Queries\Product\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\Filters\Filter;

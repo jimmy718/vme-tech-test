@@ -31,8 +31,7 @@ class ListProductsTest extends TestCase
                 $this->paginationStructure()
             );
 
-        // pagination links & meta are not present in "$response->original" so we have to decode the JSON.
-        $nextPageUrl = json_decode($response->content())->links->next;
+        $nextPageUrl = $response->json()['links']['next'];
 
         $this
             ->getJson($nextPageUrl)
@@ -66,7 +65,7 @@ class ListProductsTest extends TestCase
                 ]
             ]))
             ->assertOk()
-            ->assertJsonCount(3, 'data');
+            ->assertJsonCount(count($included), 'data');
 
         foreach ($included as $product) {
             $response->assertJsonFragment(['id' => $product->id]);
@@ -91,21 +90,47 @@ class ListProductsTest extends TestCase
                 ]
             ]))
             ->assertOk()
-            ->assertJsonCount(2, 'data');
+            ->assertJsonCount(count($included), 'data');
 
         $response->assertJsonMissing(['id' => $excluded->id]);
 
         foreach ($included as $product) {
             $response->assertJsonFragment(['id' => $product->id]);
         }
-
     }
 
-//    /** @test */
-//    public function products_can_be_filtered_by_price_range()
-//    {
-//
-//    }
+    /** @test */
+    public function products_can_be_filtered_by_price_range()
+    {
+        $included = [
+            Product::factory()->create(['price' => 550]),
+            Product::factory()->create(['price' => 750]),
+            Product::factory()->create(['price' => 1099]),
+        ];
+
+        $excluded = [
+            Product::factory()->create(['price' => 549]),
+            Product::factory()->create(['price' => 1100]),
+        ];
+
+        $response = $this
+            ->actingAs(User::factory()->create())
+            ->getJson(route('products.index', [
+                'filter' => [
+                    'price-range' => '5.50-10.99'
+                ]
+            ]))
+            ->assertOk()
+            ->assertJsonCount(count($included), 'data');
+
+        foreach ($included as $product) {
+            $response->assertJsonFragment(['id' => $product->id]);
+        }
+
+        foreach ($excluded as $product) {
+            $response->assertJsonMissing(['id' => $product->id]);
+        }
+    }
 
     /** @test */
     public function products_can_be_sorted_by_name()
@@ -124,11 +149,11 @@ class ListProductsTest extends TestCase
             ->assertOk()
             ->assertJsonCount(3, 'data');
 
-        $products = json_decode($response->content())->data;
+        $products = $response->json()['data'];
 
-        $this->assertEquals('test c', $products[0]->name);
-        $this->assertEquals('test b', $products[1]->name);
-        $this->assertEquals('test a', $products[2]->name);
+        $this->assertEquals('test c', $products[0]['name']);
+        $this->assertEquals('test b', $products[1]['name']);
+        $this->assertEquals('test a', $products[2]['name']);
     }
 
     /**

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use App\Queries\Filters\Product\SearchProductNameBarcodeAndBrand;
+use App\Queries\Product\Filters\PriceRange;
+use App\Queries\Product\Filters\SearchProductNameBarcodeAndBrand;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -22,7 +23,8 @@ class ProductsController extends Controller
             ->allowedSorts('name', 'barcode', 'brand', 'price', 'date_added')
             ->allowedFilters([
                 'brand',
-                AllowedFilter::custom('search', new SearchProductNameBarcodeAndBrand())
+                AllowedFilter::custom('search', new SearchProductNameBarcodeAndBrand()),
+                AllowedFilter::custom('price-range', new PriceRange())
             ])
             ->paginate($request->input('perPage', 15))
             ->appends($request->query());
