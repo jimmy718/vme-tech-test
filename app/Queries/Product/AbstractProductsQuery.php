@@ -10,7 +10,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 abstract class AbstractProductsQuery
 {
-    public function base(): QueryBuilder
+    protected function baseQuery(): QueryBuilder
     {
         return QueryBuilder::for(Product::class)
             ->allowedSorts('name', 'barcode', 'brand', 'price', 'date_added')

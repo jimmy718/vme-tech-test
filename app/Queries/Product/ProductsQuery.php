@@ -8,6 +8,8 @@ class ProductsQuery extends AbstractProductsQuery
 {
     public function run(): Collection
     {
-        return $this->base()->get();
+        return $this
+            ->baseQuery()
+            ->get();
     }
 }
