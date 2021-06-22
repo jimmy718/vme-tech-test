@@ -46,13 +46,13 @@ class ListProductsTest extends TestCase
     /** @test */
     public function paginated_products_can_be_searched_by_name_barcode_and_brand()
     {
-        $includedProducts = [
+        $included = [
             Product::factory()->create(['name' => 'test name']),
             Product::factory()->create(['brand' => 'test brand']),
             Product::factory()->create(['barcode' => 'test barcode']),
         ];
 
-        $excludedProducts = [
+        $excluded = [
             Product::factory()->create(['name' => 'not included']),
             Product::factory()->create(['brand' => 'not included']),
             Product::factory()->create(['barcode' => 'not included']),
@@ -68,14 +68,44 @@ class ListProductsTest extends TestCase
             ->assertOk()
             ->assertJsonCount(3, 'data');
 
-        foreach ($includedProducts as $product) {
+        foreach ($included as $product) {
             $response->assertJsonFragment(['id' => $product->id]);
         }
 
-        foreach ($excludedProducts as $product) {
+        foreach ($excluded as $product) {
             $response->assertJsonMissing(['id' => $product->id]);
         }
     }
+
+    /** @test */
+    public function products_can_be_filtered_by_brand()
+    {
+        $included = Product::factory()->count(2)->create(['brand' => 'test brand']);
+        $excluded = Product::factory()->create();
+
+        $response = $this
+            ->actingAs(User::factory()->create())
+            ->getJson(route('products.index', [
+                'filter' => [
+                    'brand' => 'test'
+                ]
+            ]))
+            ->assertOk()
+            ->assertJsonCount(2, 'data');
+
+        $response->assertJsonMissing(['id' => $excluded->id]);
+
+        foreach ($included as $product) {
+            $response->assertJsonFragment(['id' => $product->id]);
+        }
+
+    }
+
+//    /** @test */
+//    public function products_can_be_filtered_by_price_range()
+//    {
+//
+//    }
 
     /** @test */
     public function products_can_be_sorted_by_name()

@@ -21,6 +21,7 @@ class ProductsController extends Controller
         $products = QueryBuilder::for(Product::class)
             ->allowedSorts('name', 'barcode', 'brand', 'price', 'date_added')
             ->allowedFilters([
+                'brand',
                 AllowedFilter::custom('search', new SearchProductNameBarcodeAndBrand())
             ])
             ->paginate($request->input('perPage', 15))
