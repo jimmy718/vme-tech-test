@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
-use App\Models\Product;
-use App\Queries\Product\Filters\PriceRange;
-use App\Queries\Product\Filters\SearchProductNameBarcodeAndBrand;
+use App\Queries\Product\PaginatedProductsQuery;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsController extends Controller
 {
@@ -19,16 +15,8 @@ class ProductsController extends Controller
      */
     public function index(Request $request): ResourceCollection
     {
-        $products = QueryBuilder::for(Product::class)
-            ->allowedSorts('name', 'barcode', 'brand', 'price', 'date_added')
-            ->allowedFilters([
-                'brand',
-                AllowedFilter::custom('search', new SearchProductNameBarcodeAndBrand()),
-                AllowedFilter::custom('price-range', new PriceRange())
-            ])
-            ->paginate($request->input('perPage', 15))
-            ->appends($request->query());
-
-        return ProductResource::collection($products);
+        return ProductResource::collection(
+            PaginatedProductsQuery::run($request->input('perPage', 15), $request->query())
+        );
     }
 }
