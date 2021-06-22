@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Queries\Filters\Product\SearchProductNameBarcodeAndBrand;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductsController extends Controller
 {
@@ -15,8 +18,13 @@ class ProductsController extends Controller
      */
     public function index(Request $request): ResourceCollection
     {
-        return ProductResource::collection(
-            Product::paginate($request->input('perPage', 15))->withQueryString()
-        );
+        $products = QueryBuilder::for(Product::class)
+            ->allowedFilters([
+                AllowedFilter::custom('search', new SearchProductNameBarcodeAndBrand())
+            ])
+            ->paginate($request->input('perPage', 15))
+            ->appends($request->query());
+
+        return ProductResource::collection($products);
     }
 }

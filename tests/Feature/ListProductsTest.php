@@ -31,6 +31,7 @@ class ListProductsTest extends TestCase
                 $this->paginationStructure()
             );
 
+        // pagination links & meta are not present in "$response->original" so we have to decode the JSON.
         $nextPageUrl = json_decode($response->content())->links->next;
 
         $this
@@ -40,6 +41,40 @@ class ListProductsTest extends TestCase
             ->assertJsonStructure(
                 $this->paginationStructure()
             );
+    }
+
+    /** @test */
+    public function paginated_products_can_be_searched_by_name_barcode_and_brand()
+    {
+        $includedProducts = [
+            Product::factory()->create(['name' => 'test name']),
+            Product::factory()->create(['brand' => 'test brand']),
+            Product::factory()->create(['barcode' => 'test barcode']),
+        ];
+
+        $excludedProducts = [
+            Product::factory()->create(['name' => 'not included']),
+            Product::factory()->create(['brand' => 'not included']),
+            Product::factory()->create(['barcode' => 'not included']),
+        ];
+
+        $response = $this
+            ->actingAs(User::factory()->create())
+            ->getJson(route('products.index', [
+                'filter' => [
+                    'search' => 'test'
+                ]
+            ]))
+            ->assertOk()
+            ->assertJsonCount(3, 'data');
+
+        foreach ($includedProducts as $product) {
+            $response->assertJsonFragment(['id' => $product->id]);
+        }
+
+        foreach ($excludedProducts as $product) {
+            $response->assertJsonMissing(['id' => $product->id]);
+        }
     }
 
     /**
