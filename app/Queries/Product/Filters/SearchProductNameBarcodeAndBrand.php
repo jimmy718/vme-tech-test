@@ -12,8 +12,10 @@ class SearchProductNameBarcodeAndBrand implements Filter
         $query->where(function (Builder $query) use ($value) {
             $query
                 ->where('name', 'like', $this->preparedValue($value))
-                ->orWhere('brand', 'like', $this->preparedValue($value))
-                ->orWhere('barcode', 'like', $this->preparedValue($value));
+                ->orWhere('barcode', 'like', $this->preparedValue($value))
+                ->orWhereHas('brand', function (Builder $query) use ($value) {
+                    $query->where('name', 'like', $this->preparedValue($value));
+                });
         });
     }
 

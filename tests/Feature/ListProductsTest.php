@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Brand;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,14 +48,18 @@ class ListProductsTest extends TestCase
     {
         $included = [
             Product::factory()->create(['name' => 'test name']),
-            Product::factory()->create(['brand' => 'test brand']),
             Product::factory()->create(['barcode' => 'test barcode']),
+            Product::factory()->create([
+                'brand_id' => Brand::factory()->create(['name' => 'test brand'])->id
+            ]),
         ];
 
         $excluded = [
             Product::factory()->create(['name' => 'not included']),
-            Product::factory()->create(['brand' => 'not included']),
             Product::factory()->create(['barcode' => 'not included']),
+            Product::factory()->create([
+                'brand_id' => Brand::factory()->create(['name' => 'not included'])->id
+            ]),
         ];
 
         $response = $this
@@ -79,7 +84,11 @@ class ListProductsTest extends TestCase
     /** @test */
     public function products_can_be_filtered_by_brand()
     {
-        $included = Product::factory()->count(2)->create(['brand' => 'test brand']);
+        $this->withoutExceptionHandling();
+        $included = Product::factory()->count(2)->create([
+            'brand_id' => Brand::factory()->create(['name' => 'test brand'])
+        ]);
+
         $excluded = Product::factory()->create();
 
         $response = $this
@@ -163,18 +172,32 @@ class ListProductsTest extends TestCase
     {
         return [
             'data' => [
-                0 => [
-                    'id', 'name', 'barcode', 'brand', 'price', 'image_url', 'date_added'
-                ],
-                1 => [
-                    'id', 'name', 'barcode', 'brand', 'price', 'image_url', 'date_added'
-                ],
+                0 => $this->getProductStructure(),
+                1 => $this->getProductStructure(),
             ],
             'links' => [
                 'first', 'last', 'prev', 'next'
             ],
             'meta' => [
                 'current_page', 'from', 'last_page', 'path', 'per_page', 'to', 'total'
+            ]
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getProductStructure(): array
+    {
+        return [
+            'id',
+            'name',
+            'barcode',
+            'price',
+            'image_url',
+            'date_added',
+            'brand' => [
+                'id', 'name'
             ]
         ];
     }
