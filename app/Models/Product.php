@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ProductUpdatingEvent;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,10 @@ class Product extends Model
 
     protected $casts = [
         'date_added' => 'datetime'
+    ];
+
+    protected $dispatchesEvents = [
+        'updating' => ProductUpdatingEvent::class
     ];
 
     public function brand(): BelongsTo

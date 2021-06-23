@@ -52,18 +52,12 @@ class ProductsController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): ProductResource
     {
-        $startingImageUrl = $product->image_url;
-
         $product->update([
             'name' => $request->input('name', $product->name),
             'price' => $this->preparePrice($request->input('price', $product->price / 100)),
             'brand_id' => $this->getBrandIdByName($request->input('brand', $product->brand->name)),
             'image_url' => $request->hasFile('image') ? $this->storeProductImage($request) : $product->image_url
         ]);
-
-        if ($request->hasFile('image')) {
-            Storage::disk('images')->delete($startingImageUrl);
-        }
 
         return new ProductResource($product);
     }
