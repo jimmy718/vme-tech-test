@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Brand;
 use App\Models\Product;
+use App\Queries\Brand\FirstOrCreateBrandByNameQuery;
 use App\Queries\Product\PaginatedProductsQuery;
 use App\Queries\Product\ProductsQuery;
 use Illuminate\Http\Request;
@@ -14,13 +14,16 @@ use Illuminate\Http\Response;
 
 class ProductsController extends Controller
 {
+    private FirstOrCreateBrandByNameQuery $firstOrCreateBrandByName;
     private PaginatedProductsQuery $paginatedProductsQuery;
     private ProductsQuery $productsQuery;
 
     public function __construct(
+        FirstOrCreateBrandByNameQuery $firstOrCreateBrandByNameQuery,
         PaginatedProductsQuery $paginatedProductsQuery,
         ProductsQuery $productsQuery
     ) {
+        $this->firstOrCreateBrandByName = $firstOrCreateBrandByNameQuery;
         $this->paginatedProductsQuery = $paginatedProductsQuery;
         $this->productsQuery = $productsQuery;
     }
@@ -42,9 +45,9 @@ class ProductsController extends Controller
                 'name' => $request->input('name'),
                 'barcode' => $request->input('barcode'),
                 'price' => intval(floatval($request->input('price')) * 100),
+                'brand_id' => optional($this->firstOrCreateBrandByName->run($request->input('brand')))->id,
+                'image_url' => $request->file('image')->store('product-images', 'images'),
                 'date_added' => now(),
-                'brand_id' => $this->findBrandIdByName($request),
-                'image_url' => $request->file('image')->store('product-images', 'images')
             ])->load('brand')
         );
     }
@@ -54,14 +57,5 @@ class ProductsController extends Controller
         $product->delete();
 
         return response()->noContent();
-    }
-
-    protected function findBrandIdByName(Request $request): ?int
-    {
-        if (is_null($request->input('brand'))) {
-            return null;
-        }
-
-        return Brand::firstOrCreate(['name' => $request->input('brand')])->id;
     }
 }
