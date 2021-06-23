@@ -39,8 +39,8 @@ class ProductsController extends Controller
     {
         return new ProductResource(
             Product::create([
-                'barcode' => $request->input('barcode'),
                 'name' => $request->input('name'),
+                'barcode' => $request->input('barcode'),
                 'price' => intval(floatval($request->input('price')) * 100),
                 'date_added' => now(),
                 'brand_id' => $this->findBrandIdByName($request),
