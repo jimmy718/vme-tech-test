@@ -24,7 +24,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'barcode' => $this->barcode,
-            'price' => round($this->price, 2),
+            'price' => number_format($this->price / 100, 2),
             'image_url' => $this->image_url,
             'date_added' => $this->date_added->toDateTimeString(),
             'brand' => new BrandResource($this->whenLoaded('brand'))

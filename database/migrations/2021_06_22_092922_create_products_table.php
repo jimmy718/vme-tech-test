@@ -17,9 +17,9 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('barcode');
-            $table->string('brand_id');
+            $table->string('brand_id')->nullable();
             $table->unsignedBigInteger('price');
-            $table->string('image_url');
+            $table->string('image_url')->nullable();
             $table->dateTime('date_added');
             $table->timestamps();
         });
