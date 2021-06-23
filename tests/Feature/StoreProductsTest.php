@@ -51,7 +51,6 @@ class StoreProductsTest extends TestCase
             ->assertExists(
                 'product-images/' . $payload['image']->hashName()
             );
-
     }
 
     /** @test */

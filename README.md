@@ -5,25 +5,25 @@
 
 ## Acceptance Criteria
 
-- A bulk import to be used once for the initial upload of existing products from a legacy system using the provided .csv file having the following properties:
+- **A bulk import to be used once for the initial upload of existing products from a legacy system using the provided .csv file having the following properties: - DONE**
 - - Name
 - - Barcode
 - - Brand
 - - Price
 - - Image URL
 - - Date Added  
-- **A paginated list of products - done**  
-- **Search feature - done**   
-- **Sorting across all fields - done**   
-- **Filter by price range - done**  
-- **Filter by brand - done**  
+- **A paginated list of products - DONE**  
+- **Search feature - DONE**   
+- **Sorting across all fields - DONE**   
+- **Filter by price range - DONE**  
+- **Filter by brand - DONE**  
 
 - The ability to mail the filtered product list attached as a .csv to the store staff
-- **Create a new product. - done**
-- - **Barcode, name and price are required fields.**
-- - **Unbranded products are from local suppliers.**
-- - **It should be possible to add images.**
+- **Create a new product. - DONE**
+- - Barcode, name and price are required fields.
+- - Unbranded products are from local suppliers.
+- - It should be possible to add images.
 - Update a product. You can update either the name, brand, image or price.  
-- **Delete a product. - done** 
+- **Delete a product. - DONE** 
 - Notify staff of any product changes.
 

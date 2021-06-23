@@ -28,6 +28,7 @@ require __DIR__.'/auth.php';
 Route::middleware('auth')->group(function () {
     Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
     Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+    Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     Route::post('/imports/products', [ProductsImportController::class, 'import'])->name('imports.products');
