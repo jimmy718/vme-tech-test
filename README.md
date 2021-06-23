@@ -1,7 +1,7 @@
 ## Timesheet
 - Monday 21st - 1 hour
 - Tuesday 22nd - 2 hours
-
+- Wednesday 23rd - 6 hours
 
 ## Acceptance Criteria
 
@@ -23,7 +23,7 @@
 - - Barcode, name and price are required fields.
 - - Unbranded products are from local suppliers.
 - - It should be possible to add images.
-- Update a product. You can update either the name, brand, image or price.  
+- **Update a product. You can update either the name, brand, image or price. - DONE**  
 - **Delete a product. - DONE** 
 - Notify staff of any product changes.
 
