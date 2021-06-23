@@ -11,7 +11,6 @@ use App\Queries\Product\PaginatedProductsQuery;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
