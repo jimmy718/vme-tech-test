@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Brand;
 use App\Models\Product;
@@ -34,16 +35,8 @@ class ProductsController extends Controller
         );
     }
 
-    public function store(Request $request): ProductResource
+    public function store(StoreProductRequest $request): ProductResource
     {
-        $request->validate([
-            'barcode' => 'required|numeric',
-            'name' => 'required|min:3|max:255',
-            'price' => 'required|numeric',
-            'brand' => 'nullable|min:3|max:255',
-            'image' => 'nullable|image|max:512'
-        ]);
-
         return new ProductResource(
             Product::create([
                 'barcode' => $request->input('barcode'),
