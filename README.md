@@ -19,10 +19,10 @@
 - **Filter by brand - done**  
 
 - The ability to mail the filtered product list attached as a .csv to the store staff
-- Create a new product.
-- - Barcode, name and price are required fields.
-- - Unbranded products are from local suppliers.
-- - It should be possible to add images.
+- **Create a new product. - done**
+- - **Barcode, name and price are required fields.**
+- - **Unbranded products are from local suppliers.**
+- - **It should be possible to add images.**
 - Update a product. You can update either the name, brand, image or price.  
 - **Delete a product. - done** 
 - Notify staff of any product changes.

@@ -163,4 +163,16 @@ class StoreProductsTest extends TestCase
                 'image'
             ]);
     }
+
+    /** @test */
+    public function image_must_be_no_larger_than_512KB()
+    {
+        $this
+            ->actingAs(User::factory()->create())
+            ->postJson(route('products.store'), $this->validPayload([
+                'image' => UploadedFile::fake()->create('document.pdf', 513)
+            ]))->assertJsonValidationErrors([
+                'image'
+            ]);
+    }
 }

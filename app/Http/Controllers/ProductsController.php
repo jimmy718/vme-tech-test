@@ -41,7 +41,7 @@ class ProductsController extends Controller
             'name' => 'required|min:3|max:255',
             'price' => 'required|numeric',
             'brand' => 'nullable|min:3|max:255',
-            'image' => 'nullable|image'
+            'image' => 'nullable|image|max:512'
         ]);
 
         return new ProductResource(
