@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ProductsImportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,4 +29,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
     Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
     Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+
+    Route::post('/imports/products', [ProductsImportController::class, 'import'])->name('imports.products');
 });
