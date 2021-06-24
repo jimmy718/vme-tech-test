@@ -50,13 +50,18 @@
             </tr>
             </tbody>
         </table>
-        <SlidingPagination
-            class="mt-4"
-            :current="currentPage"
-            :total="totalPages"
-            @page-change="onPageChange"
-        />
-        <div>Current Page: {{currentPage}}</div>
+        <div class="flex justify-between items-center">
+            <div>
+                <SlidingPagination
+                    class="mt-4"
+                    :current="currentPage"
+                    :total="totalPages"
+                    @page-change="onPageChange"
+                />
+                <div>Current Page: {{currentPage}}</div>
+            </div>
+            <MailProductsButton :query-string="queryString"/>
+        </div>
     </div>
 </template>
 
@@ -64,11 +69,12 @@
 import SlidingPagination from 'vue-sliding-pagination'
 import BaseButton from './Utils/Button'
 import Swal from 'sweetalert2'
+import MailProductsButton from './MailProductsButton'
 
 export default {
     name: "ProductsList",
-    props: ['products', 'currentPage', 'totalPages'],
-    components: { SlidingPagination, BaseButton },
+    props: ['products', 'currentPage', 'totalPages', 'queryString'],
+    components: { SlidingPagination, BaseButton, MailProductsButton },
     data () {
         return {
             sort: {

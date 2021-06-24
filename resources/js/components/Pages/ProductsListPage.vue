@@ -8,6 +8,7 @@
             :products="products"
             :current-page="currentPage"
             :total-pages="totalPages"
+            :query-string="queryString"
             @page-changed="loadPage($event)"
             @product-deleted="removeProduct"
             @sort-updated="onSortUpdated"
