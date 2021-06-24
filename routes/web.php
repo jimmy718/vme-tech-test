@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\MailProductsToStaffController;
 use App\Http\Controllers\ProductsImportController;
@@ -27,6 +28,8 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 Route::middleware('auth')->group(function () {
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
+
     Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
     Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
