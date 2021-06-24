@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import BaseButton from './Utils/Button'
+import BaseButton from '../Utils/Button'
 import Swal from 'sweetalert2'
 
 export default {

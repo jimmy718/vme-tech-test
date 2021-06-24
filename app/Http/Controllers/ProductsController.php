@@ -98,8 +98,12 @@ class ProductsController extends Controller
         return intval(floatval($price) * 100);
     }
 
-    protected function storeProductImage(Request $request): string|false
+    protected function storeProductImage(Request $request): ?string
     {
+        if (!$request->hasFile('image')) {
+            return null;
+        }
+
         return $request->file('image')->store('product-images', 'images');
     }
 }

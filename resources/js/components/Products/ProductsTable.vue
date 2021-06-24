@@ -67,7 +67,7 @@
 
 <script>
 import SlidingPagination from 'vue-sliding-pagination'
-import BaseButton from './Utils/Button'
+import BaseButton from '../Utils/Button'
 import Swal from 'sweetalert2'
 import MailProductsButton from './MailProductsButton'
 

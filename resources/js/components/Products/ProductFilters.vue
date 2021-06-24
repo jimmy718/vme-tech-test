@@ -24,11 +24,7 @@
             <div>
                 <label for="brand">Brand</label>
             </div>
-            <select v-model="brand" id="brand" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option v-for="brand in brands" :value="brand" :key="brand.id">
-                    {{brand.name}}
-                </option>
-            </select>
+            <BrandSelect id="brand" @brand-selected="brand = $event"/>
         </div>
         <div class="flex-col">
             <BaseButton @click.native="resetFilters">Reset</BaseButton>
@@ -40,12 +36,13 @@
 </template>
 
 <script>
-import BaseInput from './Utils/Input'
-import BaseButton from './Utils/Button'
+import BaseInput from '../Utils/Input'
+import BaseButton from '../Utils/Button'
+import BrandSelect from '../Utils/BrandSelect'
 
 export default {
     name: "ProductFilters",
-    components: { BaseInput, BaseButton },
+    components: { BrandSelect, BaseInput, BaseButton },
     data () {
         return {
             search: '',
@@ -57,11 +54,6 @@ export default {
     },
     created () {
         this.emitFilters()
-
-        axios.get('/brands')
-            .then(({ data }) => {
-                this.brands = data
-            })
     },
     methods: {
         emitFilters () {
