@@ -19,7 +19,7 @@ class MailCsvToStaffJob
 
     public function handle()
     {
-        Mail::to('shop-floor-staff@co-op-shopper.com')
+        Mail::to(env('ALL_STAFF_EMAIL'))
             ->send(
                 new LabelsCsvMail($this->filename)
             );

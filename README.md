@@ -18,7 +18,7 @@
 - **Filter by price range - DONE**  
 - **Filter by brand - DONE**  
 
-- The ability to mail the filtered product list attached as a .csv to the store staff
+- **The ability to mail the filtered product list attached as a .csv to the store staff - DONE**  
 - **Create a new product. - DONE**
 - - Barcode, name and price are required fields.
 - - Unbranded products are from local suppliers.

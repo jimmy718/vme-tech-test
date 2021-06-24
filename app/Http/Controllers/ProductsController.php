@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Mail\ProductUpdateMail;
 use App\Models\Product;
 use App\Queries\Brand\FirstOrCreateBrandByNameQuery;
 use App\Queries\Product\PaginatedProductsQuery;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 
 class ProductsController extends Controller
 {
@@ -51,12 +54,28 @@ class ProductsController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): ProductResource
     {
+        $old = [
+            'name' => $product->name,
+            'price' => number_format($product->price / 100, 2),
+            'brand' => $product->brand->name,
+            'image' => $product->image_url
+        ];
+
         $product->update([
             'name' => $request->input('name', $product->name),
             'price' => $this->preparePrice($request->input('price', $product->price / 100)),
             'brand_id' => $this->getBrandIdByName($request->input('brand', $product->brand->name)),
             'image_url' => $request->hasFile('image') ? $this->storeProductImage($request) : $product->image_url
         ]);
+
+        $new = [
+            'name' => $product->name,
+            'price' => number_format($product->price / 100, 2),
+            'brand' => $product->brand->name,
+            'image' => $product->image_url
+        ];
+
+        Mail::to(env('ALL_STAFF_EMAIL'))->send(new ProductUpdateMail($old, $new));
 
         return new ProductResource($product);
     }

@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Mail\ProductUpdateMail;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -115,5 +117,28 @@ class UpdateProductsTest extends TestCase
             ->assertOk();
 
         $this->assertEquals(1599, $product->fresh()->price);
+    }
+
+    /** @test */
+    public function when_a_product_is_updated_a_staff_email_is_sent_to_notify()
+    {
+        $this->withoutExceptionHandling();
+        Mail::fake();
+
+        /** @var Product $product */
+        $product = Product::factory()->create();
+
+        $oldPrice = number_format($product->price / 100, 2);
+
+        $this
+            ->actingAs(User::factory()->create())
+            ->putJson(route('products.update', $product), [
+                'price' => 15.99
+            ])
+            ->assertOk();
+
+        Mail::assertSent(ProductUpdateMail::class, function (ProductUpdateMail $mail) use ($oldPrice) {
+            return $oldPrice === $mail->oldValues['price'] && '15.99' === $mail->newValues['price'];
+        });
     }
 }
