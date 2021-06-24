@@ -44,6 +44,8 @@ class MailedProductCsvExportTest extends TestCase
     /** @test */
     public function generated_csv_contains_correct_products()
     {
+        $this->withoutExceptionHandling();
+
         Product::factory()->create(['name' => 'test a']);
         Product::factory()->create(['name' => 'test b']);
         Product::factory()->create(['name' => 'exclude']);
@@ -67,6 +69,7 @@ class MailedProductCsvExportTest extends TestCase
     /** @test */
     public function generated_csv_is_mailed_to_all_staff_email_address()
     {
+        $this->withoutExceptionHandling();
         Product::factory()->create(['name' => 'test a']);
 
         $this
