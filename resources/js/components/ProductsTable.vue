@@ -1,16 +1,36 @@
 <template>
     <div class="w-full">
         <table class="table-auto w-full">
-            <thead>
+            <thead class="border-b border-indigo-50">
             <tr>
                 <th></th>
-                <th class="text-left">Name</th>
-                <th class="text-left">Brand</th>
-                <th class="text-right">Barcode</th>
-                <th class="text-right">Price</th>
-                <th class="text-right">Added On</th>
-                <th class="text-right">Edit</th>
-                <th class="text-right">Delete</th>
+                <th class="cursor-pointer text-left" @click="updateSort('name')">
+                    Name
+                    <span v-if="sort.field === 'name' && sort.direction === 'asc'">▲</span>
+                    <span v-if="sort.field === 'name' && sort.direction === 'desc'">▼</span>
+                </th>
+                <th class="cursor-pointer text-left" @click="updateSort('brand')">
+                    Brand
+                    <span v-if="sort.field === 'brand' && sort.direction === 'asc'">▲</span>
+                    <span v-if="sort.field === 'brand' && sort.direction === 'desc'">▼</span>
+                </th>
+                <th class="cursor-pointer text-right" @click="updateSort('barcode')">
+                    Barcode
+                    <span v-if="sort.field === 'barcode' && sort.direction === 'asc'">▲</span>
+                    <span v-if="sort.field === 'barcode' && sort.direction === 'desc'">▼</span>
+                </th>
+                <th class="cursor-pointer text-right" @click="updateSort('price')">
+                    Price
+                    <span v-if="sort.field === 'price' && sort.direction === 'asc'">▲</span>
+                    <span v-if="sort.field === 'price' && sort.direction === 'desc'">▼</span>
+                </th>
+                <th class="cursor-pointer text-right" @click="updateSort('date_added')">
+                    Added On
+                    <span v-if="sort.field === 'date_added' && sort.direction === 'asc'">▲</span>
+                    <span v-if="sort.field === 'date_added' && sort.direction === 'desc'">▼</span>
+                </th>
+                <th class="cursor-pointer text-right">Edit</th>
+                <th class="cursor-pointer text-right">Delete</th>
             </tr>
             </thead>
             <tbody>
@@ -49,6 +69,14 @@ export default {
     name: "ProductsList",
     props: ['products', 'currentPage', 'totalPages'],
     components: { SlidingPagination, BaseButton },
+    data () {
+        return {
+            sort: {
+                field: 'date_added',
+                direction: 'desc'
+            }
+        }
+    },
     methods: {
         onPageChange (newPage) {
             this.$emit('page-changed', newPage)
@@ -78,6 +106,16 @@ export default {
         },
         handleEdit (product) {
             window.location = `/products/${product.id}/edit`
+        },
+        updateSort (field) {
+            let flippedDirection = this.sort.direction === 'asc' ? 'desc' : 'asc'
+
+            this.sort = {
+                field: field,
+                direction: this.sort.field === field ? flippedDirection : 'asc'
+            }
+
+            this.$emit('sort-updated', this.sort)
         }
     }
 }

@@ -2,7 +2,7 @@
     <div>
         <ProductFilters
             @filters-selected="onFilterClicked"
-            class="border-b border-indigo-50 pb-2"
+            class="border-b border-indigo-50 pb-4"
         />
         <ProductsTable
             :products="products"
@@ -10,6 +10,7 @@
             :total-pages="totalPages"
             @page-changed="loadPage($event)"
             @product-deleted="removeProduct"
+            @sort-updated="onSortUpdated"
         />
     </div>
 </template>
@@ -49,6 +50,10 @@ export default {
         },
         onFilterClicked (queryString) {
             this.queryString = queryString
+            this.loadPage(1)
+        },
+        onSortUpdated (sort) {
+            this.queryString += '&sort=' + (sort.direction === 'desc' ? '-' : '') + sort.field
             this.loadPage(1)
         }
     }
