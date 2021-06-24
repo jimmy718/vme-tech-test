@@ -23,6 +23,7 @@
         "vue-template-compiler": "^2.6.14"
     },
     "dependencies": {
+        "@ocrv/vue-tailwind-pagination": "^0.0.4",
         "vue": "^2.6.14"
     }
 }
