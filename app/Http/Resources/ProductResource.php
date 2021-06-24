@@ -20,7 +20,7 @@ class ProductResource extends JsonResource
             'barcode' => $this->barcode,
             'price' => number_format($this->price / 100, 2),
             'image_url' => $this->image_url,
-            'date_added' => $this->date_added->toDateTimeString(),
+            'date_added' => $this->date_added->format('d/m/Y'),
             'brand' => new BrandResource($this->whenLoaded('brand'))
         ];
     }

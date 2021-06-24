@@ -10,7 +10,6 @@ use App\Models\Product;
 use App\Queries\Brand\FirstOrCreateBrandByNameQuery;
 use App\Queries\Product\PaginatedProductsQuery;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
