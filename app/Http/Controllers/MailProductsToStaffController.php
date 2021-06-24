@@ -44,7 +44,7 @@ class MailProductsToStaffController extends Controller
                 $product->name,
                 $product->barcode,
                 $product->brand->name,
-                number_format($product->price * 100),
+                number_format($product->price * 100, 2),
             ];
         });
 
