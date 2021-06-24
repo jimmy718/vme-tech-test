@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
 class ProductsController extends Controller
 {
@@ -37,6 +38,11 @@ class ProductsController extends Controller
         );
     }
 
+    public function create(): View
+    {
+        return view('products.create');
+    }
+
     public function store(StoreProductRequest $request): ProductResource
     {
         return new ProductResource(
@@ -49,6 +55,13 @@ class ProductsController extends Controller
                 'date_added' => now(),
             ])->load('brand')
         );
+    }
+
+    public function edit(Product $product): View
+    {
+        return view('products.edit', [
+            'product' => $product
+        ]);
     }
 
     public function update(UpdateProductRequest $request, Product $product): ProductResource

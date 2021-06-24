@@ -37,7 +37,7 @@
             <tr v-for="product in products">
                 <td><img :src="product.image_url" :alt="`${product.name} image`" height="50" width="50"></td>
                 <td>{{product.name}}</td>
-                <td>{{product.brand.name}}</td>
+                <td>{{product.brand ? product.brand.name : ''}}</td>
                 <td class="text-right">{{product.barcode}}</td>
                 <td class="text-right">{{product.price}}</td>
                 <td class="text-right">{{product.date_added}}</td>

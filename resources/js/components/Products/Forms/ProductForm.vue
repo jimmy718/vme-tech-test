@@ -1,31 +1,51 @@
 <template>
     <div>
-        <BaseInput v-model="name" type="text"/>
-        <p v-if="hasErrors('name')" class="text-red-400">{{getErrors('name')}}</p>
+        <div class="mb-4">
+            <label for="name">Name</label>
+            <BaseInput v-model="name" type="text" id="name"/>
+            <p v-if="hasErrors('name')" class="text-red-400">{{getErrors('name')}}</p>
+        </div>
 
-        <BaseInput v-model="barcode" type="text"/>
-        <p v-if="hasErrors('barcode')" class="text-red-400">{{getErrors('barcode')}}</p>
+        <div class="mb-4">
+            <label for="barcode">Barcode</label>
+            <BaseInput v-model="barcode" type="text" id="barcode"/>
+            <p v-if="hasErrors('barcode')" class="text-red-400">{{getErrors('barcode')}}</p>
+        </div>
 
-        <BaseInput v-model="price" type="number" min="0.00" step="0.01"/>
-        <p v-if="hasErrors('price')" class="text-red-400">{{getErrors('price')}}</p>
+        <div class="mb-4">
+            <label for="price">Price</label>
+            <BaseInput v-model="price" type="number" min="0.00" step="0.01" id="price"/>
+            <p v-if="hasErrors('price')" class="text-red-400">{{getErrors('price')}}</p>
+        </div>
 
-        <BrandSelect @brand-selected="brand = $event"/>
-        <p v-if="hasErrors('brand')" class="text-red-400">{{getErrors('brand')}}</p>
+        <div class="mb-4">
+            <label for="brand">Brand</label>
+            <BrandSelect @brand-selected="brand = $event" id="brand" class="block w-full"/>
+            <p v-if="hasErrors('brand')" class="text-red-400">{{getErrors('brand')}}</p>
+        </div>
 
-        <BaseInput v-model="image" type="file"/>
-        <p v-if="hasErrors('image')" class="text-red-400">{{getErrors('image')}}</p>
+        <div class="mb-4">
+            <label for="image">Image</label>
+            <BaseInput v-model="image" type="file" id="image"/>
+            <p v-if="hasErrors('image')" class="text-red-400">{{getErrors('image')}}</p>
+        </div>
+
+        <div class="flex justify-end">
+            <BaseButton @click.native="save">Submit</BaseButton>
+        </div>
     </div>
 </template>
 
 <script>
 import BaseInput from '../../Utils/Input'
 import BrandSelect from '../../Utils/BrandSelect'
+import BaseButton from '../../Utils/Button'
 import Swal from 'sweetalert2'
 
 export default {
     name: "ProductForm",
     props: ['product'],
-    components: { BrandSelect, BaseInput },
+    components: { BrandSelect, BaseInput, BaseButton },
     data () {
         return {
             name: '',
@@ -34,7 +54,7 @@ export default {
             brand: '',
             image: '',
             headers: { headers: {'Content-Type': 'multipart/form-data' } },
-            errors: null
+            errors: {}
         }
     },
     created () {
@@ -42,7 +62,7 @@ export default {
             this.name = this.product.name
             this.barcode = this.product.barcode
             this.price = this.product.price
-            this.brand = this.product.brand.name
+            this.brand = this.product.brand ? this.product.brand.name : ''
         }
     },
     methods: {
@@ -61,7 +81,7 @@ export default {
         },
 
         create () {
-            axios.put('/products', this.getFormData(), this.headers)
+            axios.post('/products', this.getFormData(), this.headers)
                 .then(() => {
                     window.location = '/dashboard'
                 })
@@ -76,7 +96,7 @@ export default {
             formData.append('name', this.name)
             formData.append('barcode', this.barcode)
             formData.append('price', this.price)
-            formData.append('brand', this.brand.name)
+            formData.append('brand', this.brand ? this.brand.name : '')
             formData.append('image', this.image)
 
             return formData
@@ -99,8 +119,8 @@ export default {
         },
 
         handleHttpError (error) {
-            if (error.respose.status == 422) {
-                // validation errors
+            if (error.response.status === 422) {
+                this.errors = error.response.data.errors
             } else {
                 this.genericError()
             }
