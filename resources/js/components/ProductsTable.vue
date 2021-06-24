@@ -72,8 +72,8 @@ export default {
     data () {
         return {
             sort: {
-                field: 'date_added',
-                direction: 'desc'
+                field: '',
+                direction: ''
             }
         }
     },
