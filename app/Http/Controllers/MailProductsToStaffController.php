@@ -21,7 +21,7 @@ class MailProductsToStaffController extends Controller
      * @throws \League\Csv\Exception
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function mail(Request $request)
+    public function mail(Request $request): void
     {
         $request->validate(['filter' => 'required']);
 
