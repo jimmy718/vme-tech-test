@@ -25,5 +25,5 @@
 - - It should be possible to add images.
 - **Update a product. You can update either the name, brand, image or price. - DONE**  
 - **Delete a product. - DONE** 
-- Notify staff of any product changes.
+- **Notify staff of any product changes. - DONE**
 
