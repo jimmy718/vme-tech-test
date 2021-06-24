@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\MailProductsToStaffController;
 use App\Http\Controllers\ProductsImportController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,4 +33,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     Route::post('/imports/products', [ProductsImportController::class, 'import'])->name('imports.products');
+    Route::post('/exports/products/mail', [MailProductsToStaffController::class, 'mail'])->name('exports.products.mail');
 });

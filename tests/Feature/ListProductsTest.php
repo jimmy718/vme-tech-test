@@ -84,7 +84,6 @@ class ListProductsTest extends TestCase
     /** @test */
     public function products_can_be_filtered_by_brand()
     {
-        $this->withoutExceptionHandling();
         $included = Product::factory()->count(2)->create([
             'brand_id' => Brand::factory()->create(['name' => 'test brand'])
         ]);
