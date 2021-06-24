@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\ProductUpdatingEvent;
 use App\Listeners\DeleteOldImageListener;
+use App\Listeners\EmailProductUpdateToStaffListener;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -15,7 +16,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         ProductUpdatingEvent::class => [
-            DeleteOldImageListener::class
+            DeleteOldImageListener::class,
+            EmailProductUpdateToStaffListener::class
         ]
     ];
 
