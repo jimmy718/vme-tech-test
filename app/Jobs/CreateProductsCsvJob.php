@@ -22,7 +22,6 @@ class CreateProductsCsvJob
         $this->filename = $filename;
     }
 
-
     /**
      * @throws \League\Csv\CannotInsertRecord
      * @throws \League\Csv\Exception

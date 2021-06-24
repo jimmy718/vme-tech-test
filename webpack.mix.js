@@ -17,4 +17,8 @@ mix
         require('postcss-import'),
         require('tailwindcss'),
         require('autoprefixer'),
-    ]);
+    ])
+    .copy(
+        'node_modules/vue-sliding-pagination/dist/style/vue-sliding-pagination.css',
+        'public/css/vue-sliding-pagination.css'
+    );

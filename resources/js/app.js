@@ -4,9 +4,7 @@ require('./bootstrap');
 
 require('alpinejs');
 
-
-// Register Global Vue components
-
+Vue.component('product-list-page', require('./components/Pages/ProductsListPage').default)
 
 const app = new Vue({
     el: '#app'
