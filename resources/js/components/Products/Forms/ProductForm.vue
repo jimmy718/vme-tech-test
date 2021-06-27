@@ -26,7 +26,7 @@
 
         <div class="mb-4">
             <label for="image">Image</label>
-            <BaseInput v-model="image" type="file" id="image"/>
+            <BaseInput type="file" id="image" ref="image"/>
             <p v-if="hasErrors('image')" class="text-red-400">{{getErrors('image')}}</p>
         </div>
 
@@ -97,7 +97,7 @@ export default {
             formData.append('barcode', this.barcode)
             formData.append('price', this.price)
             formData.append('brand', this.brand ? this.brand.name : '')
-            formData.append('image', this.image)
+            formData.append('image', this.$refs.image.$el.files[0])
 
             return formData
         },

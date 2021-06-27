@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProductsController extends Controller
@@ -66,28 +67,12 @@ class ProductsController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): ProductResource
     {
-        $old = [
-            'name' => $product->name,
-            'price' => number_format($product->price / 100, 2),
-            'brand' => $product->brand->name,
-            'image' => $product->image_url
-        ];
-
         $product->update([
             'name' => $request->input('name', $product->name),
             'price' => $this->preparePrice($request->input('price', $product->price / 100)),
             'brand_id' => $this->getBrandIdByName($request->input('brand', $product->brand->name)),
             'image_url' => $request->hasFile('image') ? $this->storeProductImage($request) : $product->image_url
         ]);
-
-        $new = [
-            'name' => $product->name,
-            'price' => number_format($product->price / 100, 2),
-            'brand' => $product->brand->name,
-            'image' => $product->image_url
-        ];
-
-        Mail::to(env('ALL_STAFF_EMAIL'))->send(new ProductUpdateMail($old, $new));
 
         return new ProductResource($product);
     }
@@ -117,6 +102,8 @@ class ProductsController extends Controller
             return null;
         }
 
-        return $request->file('image')->store('product-images', 'images');
+        return Storage::url(
+            $request->file('image')->storePublicly('product-images', 'images')
+        );
     }
 }
