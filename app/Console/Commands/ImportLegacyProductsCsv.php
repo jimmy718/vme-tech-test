@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\ProductsCsvImportJob;
+use App\Queries\Brand\FirstOrCreateBrandByNameQuery;
 use Illuminate\Console\Command;
 
 class ImportLegacyProductsCsv extends Command
@@ -12,7 +13,7 @@ class ImportLegacyProductsCsv extends Command
      *
      * @var string
      */
-    protected $signature = 'import:legacy';
+    protected $signature = 'import:legacy {filepath?}';
 
     /**
      * The console command description.
@@ -22,22 +23,6 @@ class ImportLegacyProductsCsv extends Command
     protected $description = 'Import legacy products from csv';
 
     /**
-     * @var ProductsCsvImportJob
-     */
-    private ProductsCsvImportJob $csvImport;
-
-    /**
-     * ImportLegacyProductsCSV constructor.
-     * @param ProductsCsvImportJob $csvImport
-     */
-    public function __construct(ProductsCsvImportJob $csvImport)
-    {
-        parent::__construct();
-
-        $this->csvImport = $csvImport;
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
@@ -45,7 +30,10 @@ class ImportLegacyProductsCsv extends Command
      */
     public function handle()
     {
-        $this->csvImport->handle();
+        ProductsCsvImportJob::dispatch(
+            $this->argument('filepath') ?? 'app/Console/Commands/legacy_products.csv',
+            new FirstOrCreateBrandByNameQuery(),
+        );
 
         return 0;
     }

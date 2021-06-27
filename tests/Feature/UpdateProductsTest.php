@@ -85,7 +85,7 @@ class UpdateProductsTest extends TestCase
     {
         Storage::fake('images');
 
-        $originalImagePath = UploadedFile::fake()->image('image-a.png')->store('product-images', 'images');
+        $originalImagePath = Storage::url(UploadedFile::fake()->image('image-a.png')->store('product-images', 'images'));
 
         /** @var Product $product */
         $product = Product::factory()->create(['image_url' => $originalImagePath]);
