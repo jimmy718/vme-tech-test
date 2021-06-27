@@ -1,6 +1,6 @@
 <template>
-    <select v-model="brand" @change="emitBrand" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-        <option v-for="brand in brands" :value="brand" :key="brand.id">
+    <select v-model="brandId" @change="emitBrand" class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+        <option v-for="brand in brands" :value="brand.id" :key="brand.id">
             {{brand.name}}
         </option>
     </select>
@@ -12,14 +12,13 @@ export default {
     props: ['startingBrand'],
     data () {
         return {
-            brand: '',
+            brandId: '',
             brands: []
         }
     },
     created () {
         if (this.startingBrand) {
-            this.brand = brand
-            this.emitBrand()
+            this.brandId = this.startingBrand.id
         }
 
         axios.get('/brands')
@@ -29,12 +28,11 @@ export default {
     },
     methods: {
         emitBrand () {
-            this.$emit('brand-selected', brand)
+            this.$emit(
+                'brand-selected',
+                this.brands.find(brand => brand.id === this.brandId)
+            )
         }
     }
 }
 </script>
-
-<style scoped>
-
-</style>
