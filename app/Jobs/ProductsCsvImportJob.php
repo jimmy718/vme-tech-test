@@ -19,14 +19,11 @@ class ProductsCsvImportJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private array $csvHeaders = [];
-    private string $csvStoragePath;
     private FirstOrCreateBrandByNameQuery $firstOrCreateBrandByName;
 
     public function __construct(
-        string $csvStoragePath,
         FirstOrCreateBrandByNameQuery $firstOrCreateBrandByNameQuery
     ) {
-        $this->csvStoragePath = $csvStoragePath;
         $this->firstOrCreateBrandByName = $firstOrCreateBrandByNameQuery;
     }
 
@@ -35,7 +32,7 @@ class ProductsCsvImportJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $reader = Reader::createFromString(Storage::get($this->csvStoragePath));
+        $reader = Reader::createFromPath('app/Console/Commands/legacy_products.csv');
 
         $this->csvHeaders = $reader->fetchOne();
 
