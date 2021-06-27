@@ -20,7 +20,7 @@
 
         <div class="mb-4">
             <label for="brand">Brand</label>
-            <BrandSelect @brand-selected="brand = $event" id="brand" class="block w-full"/>
+            <BrandSelect @brand-selected="brand = $event" id="brand" class="block w-full" :starting-brand="brand"/>
             <p v-if="hasErrors('brand')" class="text-red-400">{{getErrors('brand')}}</p>
         </div>
 
@@ -51,7 +51,7 @@ export default {
             name: '',
             barcode: '',
             price: '',
-            brand: '',
+            brand: { id: 0, name: '' },
             image: '',
             headers: { headers: {'Content-Type': 'multipart/form-data' } },
             errors: {}
@@ -61,8 +61,8 @@ export default {
         if (this.product) {
             this.name = this.product.name
             this.barcode = this.product.barcode
-            this.price = this.product.price
-            this.brand = this.product.brand ? this.product.brand.name : ''
+            this.price = this.product.price / 100
+            this.brand = this.product.brand
         }
     },
     methods: {
@@ -71,7 +71,11 @@ export default {
         },
 
         update () {
-            axios.put(`/products/${this.product.id}`, this.getFormData(), this.headers)
+            let formData = this.getFormData()
+            formData.append('_method', 'PUT')
+            // .put doesn't send form data correctly, so we use POST and
+            // take advantage of Laravel's method spoofing to make it a PUT
+            axios.post(`/products/${this.product.id}`, formData, this.headers)
                 .then(() => {
                     window.location = '/dashboard'
                 })
