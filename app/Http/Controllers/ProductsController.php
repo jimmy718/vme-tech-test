@@ -61,7 +61,7 @@ class ProductsController extends Controller
     public function edit(Product $product): View
     {
         return view('products.edit', [
-            'product' => $product
+            'product' => $product->load('brand')
         ]);
     }
 
