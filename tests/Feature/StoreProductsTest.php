@@ -12,6 +12,13 @@ class StoreProductsTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        Storage::fake('images');
+    }
+
     protected function validPayload(array $overrides = [])
     {
         return array_merge([
@@ -32,8 +39,6 @@ class StoreProductsTest extends TestCase
     /** @test */
     public function users_can_store_products()
     {
-        Storage::fake('images');
-
         $payload = $this->validPayload();
 
         $this
